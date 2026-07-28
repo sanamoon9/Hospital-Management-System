@@ -6,15 +6,17 @@ public class Doctor extends Person{
     private int maxAppointments;
     private String specialty;
     private int currentAppointments;
-    private List<String> shifts;
+    private int startHour;
+    private int endHour;
 
-    public Doctor(String name,String id,String phoneNumber,String department,int maxAppointments,int currentAppointments,String specialty ){
+    public Doctor(String name,String id,String phoneNumber,String department,int maxAppointments,int currentAppointments,String specialty,int startHour,int endHour){
         super(name, id, phoneNumber);
         this.department=department;
         this.maxAppointments=maxAppointments;
         this.specialty=specialty;
         this.currentAppointments=currentAppointments;
-        this.shifts=new ArrayList<>();
+        this.startHour=startHour;
+        this.endHour=endHour;
     }
 
     public String getDepartment() {
@@ -22,7 +24,7 @@ public class Doctor extends Person{
     }
 
     public void setDepartment(String department) {
-        department = department;
+        this.department = department;
     }
 
 
@@ -53,16 +55,25 @@ public class Doctor extends Person{
         this.currentAppointments = currentAppointments;
     }
 
-    public List<String> getShifts() {
-        return shifts;
+    public int getStartHour() {
+        return startHour;
     }
 
-    public void setShifts(List<String> shifts) {
-        this.shifts = shifts;
+    public void setStartHour(int startHour) {
+        this.startHour = startHour;
     }
+
+    public int getEndHour() {
+        return endHour;
+    }
+
+    public void setEndHour(int endHour) {
+        this.endHour = endHour;
+    }
+
 
     public String getInfo(){
-        return "specialty:"+specialty+"Department: "+department+" "+"currentAppointments:"+currentAppointments+" "+"shift:"+shifts;
+        return "specialty:"+specialty+"Department: "+department+" "+"currentAppointments:"+currentAppointments+" "+"shift:"+startHour+"_"+endHour;
 
     }
     public boolean hasAvailableAppointment(){
@@ -87,12 +98,8 @@ public class Doctor extends Person{
             return false;
         }
     }
-    public void addShifts(String shift){
-        shifts.add(shift);
-
-    }
-    public boolean isAvailableInShift(String currentShift){
-        return shifts.contains(currentShift);
+    public boolean isAvailableInShift(int hour){
+        return hour>=startHour && hour<endHour;
     }
 
 
