@@ -11,9 +11,9 @@ public class Appointment {
     private int appointmentNum;
     private double cost;
     private boolean isEmergency;
-    private String departmentName;
+    private Department department;
 
-    public Appointment(LocalDateTime appointmentTime,Doctor doctor,Patient patient,String status,int appointmentNum ,double cost,boolean isEmergency,String departmentName){
+    public Appointment(LocalDateTime appointmentTime,Doctor doctor,Patient patient,String status,int appointmentNum ,double cost,boolean isEmergency,Department department){
         this.appointmentTime=appointmentTime;
         this.doctor=doctor;
         this.patient=patient;
@@ -21,7 +21,7 @@ public class Appointment {
         this.appointmentNum=appointmentNum;
         this.cost=cost;
         this.isEmergency=isEmergency;
-        this.departmentName=departmentName;
+        this.department=department;
     }
 
     public LocalDateTime getAppointmentTime() {
@@ -78,18 +78,17 @@ public class Appointment {
         return isEmergency;
     }
 
-    public void setEmergency(boolean emergency) {
-        isEmergency = emergency;
-    }
-    public String getDepartmentName() {
-        return departmentName;
+    public Department getDepartment() {
+        return department;
     }
 
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
+    public void setDepartment(Department department) {
+        this.department = department;
     }
+
+
     public String getInfApp(){
-        return "Doctor:"+doctor.getName()+" "+"Patient:"+patient.getName()+" "+"AppointmentTime:"+appointmentTime+" "+"AppointmentNumber:"+appointmentNum+"Status:"+status+" "+" "+"Cost:"+cost+" "+" "+"IsEmergency:"+isEmergency+" "+"DepartmentName:"+departmentName;
+        return "Doctor:"+doctor.getName()+" "+"Patient:"+patient.getName()+" "+"AppointmentTime:"+appointmentTime+" "+"AppointmentNumber:"+appointmentNum+"Status:"+status+" "+" "+"Cost:"+cost+" "+" "+"IsEmergency:"+isEmergency+" "+"DepartmentName:"+department;
     }
     public void cancel(){
         this.status="Cancelled";
@@ -116,11 +115,7 @@ public class Appointment {
     public boolean isInDoctorShift(){
         return doctor.isAvailableInShift(appointmentTime.getHour());
     }
-    public boolean bookAnAppointment() {
-        if ( isInDoctorShift()) {
-            doctor.addPatient();
-            return true;
-        }
-        return false;
+    public boolean bookAnAppointment(Department department) {
+      return department.assignPatientToDoctor(patient,doctor,appointmentTime.getHour());
     }
 }
