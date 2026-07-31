@@ -7,12 +7,17 @@ public class Department {
     private List<Patient>patients;
     private int capacity;
     private double departmentCost;
-    public Department(String departmentName,int capacity,double departmentCost){
+    private double serviceCost;
+    private double totalIncome;
+
+    public Department(String departmentName,int capacity,double departmentCost,double serviceCost,double totalIncome){
         this.departmentName=departmentName;
         this.capacity=capacity;
         this.departmentCost=departmentCost;
         this.doctors=new ArrayList<>();
         this.patients=new ArrayList<>();
+        this.serviceCost=serviceCost;
+        this.totalIncome=0;
 
     }
     public int getCapacity() {
@@ -49,6 +54,24 @@ public class Department {
     public List<Patient> getPatients(){
         return patients;
     }
+
+    public double getServiceCost() {
+        return serviceCost;
+    }
+
+    public void setServiceCost(double serviceCost) {
+        this.serviceCost = serviceCost;
+    }
+
+    public double getTotalIncome() {
+        return totalIncome;
+    }
+
+    public void setTotalIncome(double totalIncome) {
+        this.totalIncome = totalIncome;
+    }
+
+
     public boolean isFull(){
        if(patients.size()>=capacity){
            return true;
@@ -85,20 +108,17 @@ public class Department {
         if (!doctor.hasAvailableAppointment()) {
             return false;
         }
-
-        if (doctor.addPatient(patient)){
-            patient.setDoctor(doctor);
-            patients.add(patient);
-            return true;
+        if (!patients.contains(patient)) {
+          if (doctor.addPatient(patient)) {
+              addPatient(patient);
+              patient.setDoctor(doctor);
+              return true;
+          }
         }
         return false;
     }
-    public double totalCost(){
-        double total=0;
-        for (Patient p:patients){
-            total+=p.getInvoice();
-        }
-        return total+getBonus();
+    public double totalIncome(double amount){
+        return totalIncome+=amount;
     }
     public double getBonus(){
         if (patients.isEmpty()){
@@ -106,7 +126,8 @@ public class Department {
         }
         return 0;
     }
+
     public String getInfo(){
-        return "Department:"+departmentName+" "+"Patients:"+patients.size()+" "+"Doctors:"+doctors.size()+" "+"Capacity:"+capacity+" "+"TotalCost:"+totalCost();
+        return "Department:"+departmentName+" "+"Patients:"+patients.size()+" "+"Doctors:"+doctors.size()+" "+"Capacity:"+capacity+" "+"TotalIncome:"+totalIncome;
     }
 }

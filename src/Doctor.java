@@ -2,14 +2,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Doctor extends Person{
-    private String department;
+
+    private Department department;
     private int maxAppointments;
     private String specialty;
     private int startHour;
     private int endHour;
     private List<Patient>patients;
 
-    public Doctor(String name,String id,String phoneNumber,String department,int maxAppointments,String specialty,int startHour,int endHour){
+    public Doctor(String name,String id,String phoneNumber,Department department,int maxAppointments,String specialty,int startHour,int endHour){
         super(name, id, phoneNumber);
         this.department=department;
         this.maxAppointments=maxAppointments;
@@ -20,11 +21,7 @@ public class Doctor extends Person{
 
     }
 
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
+    public void setDepartment(Department department) {
         this.department = department;
     }
 
@@ -72,7 +69,7 @@ public class Doctor extends Person{
         this.patients = patients;
     }
     public String getInfo(){
-        return "specialty:"+specialty+"Department: "+department+" "+" "+"shift:"+startHour+"_"+endHour;
+        return super.getInfo()+" "+"specialty:"+specialty+"Department: "+department.getDepartmentName()+" "+" "+"shift:"+startHour+"_"+endHour;
 
     }
     public boolean hasAvailableAppointment(){

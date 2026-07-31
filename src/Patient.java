@@ -7,19 +7,19 @@ public class Patient extends Person{
     private String assignedDepartment;
     private Doctor doctor;
     private boolean isEmergency;
-    private double invoice;
     private int queueNumber;
     private boolean isAdmitted;
-    public Patient(String name,String id,String phoneNumber,int age,String assignedDepartment,boolean isEmergency,Doctor doctor,double invoice,int queueNumber,boolean isAdmitted ){
+    private Wallet wallet;
+    public Patient(String name,String id,String phoneNumber,int age,String assignedDepartment,boolean isEmergency,Doctor doctor,int queueNumber,boolean isAdmitted,Wallet wallet ){
         super(name,id,phoneNumber);
         this.age=age;
         this.medicalHistory=new ArrayList<>();
         this.assignedDepartment=assignedDepartment;
         this.doctor=doctor;
         this.isEmergency=isEmergency;
-        this.invoice=invoice;
         this.queueNumber=queueNumber;
         this.isAdmitted=isAdmitted;
+        this.wallet=wallet;
     }
     public int getAge() {
         return age;
@@ -65,13 +65,6 @@ public class Patient extends Person{
     }
 
 
-    public double getInvoice() {
-        return invoice;
-    }
-
-    public void setInvoice(double invoice) {
-        this.invoice = invoice;
-    }
     public int getQueueNumber() {
         return queueNumber;
     }
@@ -87,12 +80,15 @@ public class Patient extends Person{
     public void setAdmitted(boolean admitted) {
         isAdmitted = admitted;
     }
-
-    public String getInfo(){
-        return "Age:"+age+" "+"medicalHistory:"+medicalHistory+" "+"assignedDepartment:"+assignedDepartment+" "+"doctorsname:"+doctor.getName()+" "+"isEmergency:"+isEmergency()+" "+"invoice:"+invoice+" "+"queueNumber:"+queueNumber+" "+"isAdmitted:"+isAdmitted;
+    public Wallet getWallet() {
+        return wallet;
     }
-    public void addCost(double amount){
-        this.invoice+=amount;
+
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
+    }
+    public String getInfo(){
+        return super.getInfo()+" "+"Age:"+age+" "+"medicalHistory:"+medicalHistory+" "+"assignedDepartment:"+assignedDepartment+" "+"Doctor name:"+(doctor !=null ? doctor.getName() : "Null") +" " + "isEmergency:"+isEmergency()+" "+"queueNumber:"+queueNumber+" "+"isAdmitted:"+isAdmitted;
     }
     public void addMedicalHistory(String history){
         medicalHistory.add(history);
