@@ -42,12 +42,7 @@ public class Department {
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
     }
-    public void addDoctor(Doctor doctor){
-        doctors.add(doctor);
-    }
-    public void removeDoctor(Doctor doctor){
-        doctors.remove(doctor);
-    }
+
     public List<Doctor> getDoctors(){
         return doctors;
     }
@@ -71,6 +66,17 @@ public class Department {
         this.totalIncome = totalIncome;
     }
 
+    public void addDoctor(Doctor doctor){
+        if (!doctors.contains(doctor)){
+            doctors.add(doctor);
+            doctor.setDepartment(this);
+        }
+
+    }
+
+    public void removeDoctor(Doctor doctor){
+        doctors.remove(doctor);
+    }
 
     public boolean isFull(){
        if(patients.size()>=capacity){
@@ -109,8 +115,8 @@ public class Department {
             return false;
         }
         if (!patients.contains(patient)) {
+            addPatient(patient);
           if (doctor.addPatient(patient)) {
-              addPatient(patient);
               patient.setDoctor(doctor);
               return true;
           }

@@ -10,9 +10,8 @@ public class Doctor extends Person{
     private int endHour;
     private List<Patient>patients;
 
-    public Doctor(String name,String id,String phoneNumber,Department department,int maxAppointments,String specialty,int startHour,int endHour){
+    public Doctor(String name,String id,String phoneNumber,int maxAppointments,String specialty,int startHour,int endHour){
         super(name, id, phoneNumber);
-        this.department=department;
         this.maxAppointments=maxAppointments;
         this.specialty=specialty;
         this.startHour=startHour;
@@ -25,6 +24,9 @@ public class Doctor extends Person{
         this.department = department;
     }
 
+    public Department getDepartment() {
+        return department;
+    }
 
     public int getMaxAppointments() {
         return maxAppointments;

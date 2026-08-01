@@ -10,14 +10,11 @@ public class Patient extends Person{
     private int queueNumber;
     private boolean isAdmitted;
     private Wallet wallet;
-    public Patient(String name,String id,String phoneNumber,int age,String assignedDepartment,boolean isEmergency,Doctor doctor,int queueNumber,boolean isAdmitted,Wallet wallet ){
+    public Patient(String name,String id,String phoneNumber,int age,boolean isEmergency,boolean isAdmitted,Wallet wallet ){
         super(name,id,phoneNumber);
         this.age=age;
         this.medicalHistory=new ArrayList<>();
-        this.assignedDepartment=assignedDepartment;
-        this.doctor=doctor;
         this.isEmergency=isEmergency;
-        this.queueNumber=queueNumber;
         this.isAdmitted=isAdmitted;
         this.wallet=wallet;
     }
