@@ -3,7 +3,7 @@ import java.util.List;
 
 public class ConditionService {
     public boolean isCriticalCondition(Hospital hospital,Patient patient,Department department){
-      return hospital.isHositalFull();
+      return hospital.isHospitalFull();
 
     }
     public boolean isSuccessCondition(Department department){

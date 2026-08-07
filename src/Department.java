@@ -6,18 +6,16 @@ public class Department {
     private List<Doctor>doctors;
     private List<Patient>patients;
     private int capacity;
-    private double departmentCost;
-    private double serviceCost;
+    private CostDeManager costDeManager;
     private double totalIncome;
 
-    public Department(String departmentName,int capacity,double departmentCost,double serviceCost,double totalIncome){
+    public Department(String departmentName,int capacity,CostDeManager costDeManager,double totalIncome){
         this.departmentName=departmentName;
         this.capacity=capacity;
-        this.departmentCost=departmentCost;
         this.doctors=new ArrayList<>();
         this.patients=new ArrayList<>();
-        this.serviceCost=serviceCost;
-        this.totalIncome=0;
+        this.costDeManager=costDeManager;
+        this.totalIncome=totalIncome;
 
     }
     public int getCapacity() {
@@ -25,14 +23,6 @@ public class Department {
     }
     public void setCapacity(int capacity) {
         this.capacity = capacity;
-    }
-
-    public double getDepartmentCost() {
-        return departmentCost;
-    }
-
-    public void setDepartmentCost(double departmentCost) {
-        this.departmentCost = departmentCost;
     }
 
     public String getDepartmentName() {
@@ -50,13 +40,6 @@ public class Department {
         return patients;
     }
 
-    public double getServiceCost() {
-        return serviceCost;
-    }
-
-    public void setServiceCost(double serviceCost) {
-        this.serviceCost = serviceCost;
-    }
 
     public double getTotalIncome() {
         return totalIncome;
@@ -64,6 +47,14 @@ public class Department {
 
     public void setTotalIncome(double totalIncome) {
         this.totalIncome = totalIncome;
+    }
+
+    public CostDeManager getCostDeManager() {
+        return costDeManager;
+    }
+
+    public void setCostDeManager(CostDeManager costDeManager) {
+        this.costDeManager = costDeManager;
     }
 
     public void addDoctor(Doctor doctor){
@@ -115,16 +106,19 @@ public class Department {
             return false;
         }
         if (!patients.contains(patient)) {
-            addPatient(patient);
-          if (doctor.addPatient(patient)) {
-              patient.setDoctor(doctor);
-              return true;
-          }
+            if (!addPatient(patient)) {
+                return false;
+            }
+        }
+
+        if (doctor.addPatient(patient)) {
+            patient.setDoctor(doctor);
+            return true;
         }
         return false;
     }
-    public double totalIncome(double amount){
-        return totalIncome+=amount;
+    public void addIncome(double amount){
+        totalIncome+=amount;
     }
     public double getBonus(){
         if (patients.isEmpty()){
@@ -132,7 +126,9 @@ public class Department {
         }
         return 0;
     }
-
+    public double serviceCost(){
+        return costDeManager.calculateCost(patients.size());
+    }
     public String getInfo(){
         return "Department:"+departmentName+" "+"Patients:"+patients.size()+" "+"Doctors:"+doctors.size()+" "+"Capacity:"+capacity+" "+"TotalIncome:"+totalIncome;
     }

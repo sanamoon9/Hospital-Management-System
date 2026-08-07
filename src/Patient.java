@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Patient extends Person{
     private int age;
     private List<String> medicalHistory;

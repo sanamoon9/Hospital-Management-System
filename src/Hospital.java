@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Hospital {
 
@@ -9,6 +11,9 @@ public class Hospital {
     private FinanceManager financeManager;
     private int capacity;
     private ConditionService conditionService=new ConditionService();
+    private PatientDA patientDA=new PatientDA();
+    private AppointmentDA appointmentDA=new AppointmentDA();
+    private FinanceDA financeDA=new FinanceDA();
 
     public Hospital(String hospitalName,FinanceManager financeManager,int capacity){
        this.hospitalName=hospitalName;
@@ -57,7 +62,7 @@ public class Hospital {
         this.capacity = capacity;
     }
 
-   public void addDoctor(Doctor doctor ,Department department){
+    public void addDoctor(Doctor doctor ,Department department){
            department.addDoctor(doctor);
    }
    public void removeDoctor(Doctor doctor){
@@ -76,12 +81,7 @@ public class Hospital {
      department.addPatient(patient);
      return true;
    }
-    public boolean addPatient(Patient patient ,Department department ,Doctor doctor,Appointment appointment){
-      if (isHositalFull()) {
-          return false;
-      }
-      return department.assignPatientToDoctor(patient,doctor,appointment.getAppointmentTime().getHour());
-    }
+
     public void dischargePatient(Patient patient,Department department){
         department.removePatient(patient);
         if (conditionService.isSuccessCondition(department)){
@@ -98,12 +98,29 @@ public class Hospital {
         return departments;
     }
 
-    public boolean isHositalFull(){
+    public boolean isHospitalFull(){
         int totalPatient=0;
         for (Department d:departments){
             totalPatient+=d.getPatients().size();
         }
         return totalPatient>=capacity;
+    }
+    public boolean createAppointment(Patient patient, Doctor doctor, Department department, Appointment appointment) {
+
+        if (isHospitalFull()) {
+            return false;
+        }
+        boolean assigned = department.assignPatientToDoctor(patient, doctor, appointment.getAppointmentTime().getHour());
+        if (assigned) {
+            appointments.add(appointment);
+            appointmentDA.insert(appointment);
+            patientDA.insert(patient);
+            financeManager.appointmentRevenue(patient, appointment);
+            financeDA.addDailyIncome(LocalDate.now().toString(), appointment.getCost());
+            return true;
+        }
+
+        return false;
     }
 }
 

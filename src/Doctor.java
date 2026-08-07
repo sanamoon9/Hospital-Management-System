@@ -71,7 +71,7 @@ public class Doctor extends Person{
         this.patients = patients;
     }
     public String getInfo(){
-        return super.getInfo()+" "+"specialty:"+specialty+"Department: "+department.getDepartmentName()+" "+" "+"shift:"+startHour+"_"+endHour;
+        return super.getInfo()+" "+"specialty:"+specialty+"Department: "+(department != null ? department.getDepartmentName() : "None")+" "+" "+"shift:"+startHour+"_"+endHour;
 
     }
     public boolean hasAvailableAppointment(){
