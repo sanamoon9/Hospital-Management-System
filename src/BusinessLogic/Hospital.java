@@ -1,7 +1,11 @@
+package BusinessLogic;
+
+import DataAccess.AppointmentDA;
+import DataAccess.FinanceDA;
+import DataAccess.PatientDA;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class Hospital {
 
@@ -15,7 +19,7 @@ public class Hospital {
     private AppointmentDA appointmentDA=new AppointmentDA();
     private FinanceDA financeDA=new FinanceDA();
 
-    public Hospital(String hospitalName,FinanceManager financeManager,int capacity){
+    public Hospital(String hospitalName, FinanceManager financeManager, int capacity){
        this.hospitalName=hospitalName;
        this.financeManager=financeManager;
         this.departments=new ArrayList<>();
@@ -63,7 +67,7 @@ public class Hospital {
         this.capacity = capacity;
     }
 
-    public void addDoctor(Doctor doctor ,Department department){
+    public void addDoctor(Doctor doctor , Department department){
            department.addDoctor(doctor);
    }
    public void removeDoctor(Doctor doctor){
@@ -75,7 +79,7 @@ public class Hospital {
         return new ArrayList<>(department.getDoctors());
    }
 
-   public boolean addEmergencyPatient(Patient patient ,Department department){
+   public boolean addEmergencyPatient(Patient patient , Department department){
      if (!patient.isEmergency()){
          return false;
      }
@@ -83,7 +87,7 @@ public class Hospital {
      return true;
    }
 
-    public void dischargePatient(Patient patient,Department department){
+    public void dischargePatient(Patient patient, Department department){
         department.removePatient(patient);
     }
     public List<Patient> getAllPatient(Department department){

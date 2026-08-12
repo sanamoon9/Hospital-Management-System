@@ -1,9 +1,14 @@
+package Presentation;
+import BusinessLogic.ConditionService;
+import BusinessLogic.Department;
+import BusinessLogic.FinanceManager;
+import BusinessLogic.Hospital;
 import javax.swing.*;
 import java.awt.*;
 
 public class ReportPanel extends JPanel {
 
-    public ReportPanel(Hospital hospital, FinanceManager financeManager,ConditionService conditionService) {
+    public ReportPanel(Hospital hospital, FinanceManager financeManager, ConditionService conditionService) {
 
         setLayout(new BorderLayout());
         JTextArea area = new JTextArea();

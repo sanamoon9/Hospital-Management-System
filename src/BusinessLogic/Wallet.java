@@ -1,3 +1,5 @@
+package BusinessLogic;
+
 public class Wallet {
     private double balance;
 

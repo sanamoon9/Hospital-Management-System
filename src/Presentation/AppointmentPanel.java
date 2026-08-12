@@ -1,10 +1,14 @@
+package Presentation;
+import BusinessLogic.*;
+import DataAccess.AppointmentDA;
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDateTime;
 
 public class AppointmentPanel extends JPanel {
     private AppointmentDA appointmentDA=new AppointmentDA();
-    public AppointmentPanel(Hospital hospital,FinanceManager financeManager) {
+    private DoctorPanel doctorPanel;
+    public AppointmentPanel(Hospital hospital, FinanceManager financeManager) {
         setLayout(new BorderLayout(10, 10));
         JPanel form = new JPanel(new GridLayout(5, 2, 10, 10));
         JComboBox<String> dep = new JComboBox<>();
@@ -72,7 +76,7 @@ public class AppointmentPanel extends JPanel {
             Patient p = hospital.findPatientById(patiId);
 
             if (p == null) {
-                result.setText(" Patient not found");
+                result.setText("Patient not found");
                 return;
             }
 
@@ -83,7 +87,7 @@ public class AppointmentPanel extends JPanel {
             Appointment ap = new Appointment(now, selectedDoctor, p, "Scheduled",appointmentNumber, isEmergency, de);
 
             if (!ap.isInDoctorShift()) {
-                result.setText(" Doctor not in shift");
+                result.setText("Doctor not in shift");
                 return;
             }
 
@@ -93,11 +97,13 @@ public class AppointmentPanel extends JPanel {
                 return;
             }
 
-            JOptionPane.showMessageDialog(this, " Appointment Registered");
+            JOptionPane.showMessageDialog(this, "Appointment Registered");
             result.setText(" Cost: " + ap.getCost());
         });
     }
-        private void loadDoctors(JComboBox<String> doc,Hospital hospital, String depName) {
+
+
+        private void loadDoctors(JComboBox<String> doc, Hospital hospital, String depName) {
             doc.removeAllItems();
             Department d = hospital.findDepartmentByName(depName);
             if (d != null) {

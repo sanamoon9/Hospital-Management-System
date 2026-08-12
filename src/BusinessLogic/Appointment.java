@@ -1,7 +1,7 @@
+package BusinessLogic;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Appointment {
     private LocalDateTime appointmentTime;
@@ -14,7 +14,7 @@ public class Appointment {
     private Department department;
     private double cost;
 
-    public Appointment(LocalDateTime appointmentTime,Doctor doctor,Patient patient,String status,int appointmentNum ,boolean isEmergency,Department department){
+    public Appointment(LocalDateTime appointmentTime, Doctor doctor, Patient patient, String status, int appointmentNum , boolean isEmergency, Department department){
         this.appointmentTime=appointmentTime;
         this.doctor=doctor;
         this.patient=patient;

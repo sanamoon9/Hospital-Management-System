@@ -1,5 +1,11 @@
+package DataAccess;
+
+import BusinessLogic.Appointment;
+import BusinessLogic.Department;
+import BusinessLogic.Doctor;
+import BusinessLogic.Patient;
+
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

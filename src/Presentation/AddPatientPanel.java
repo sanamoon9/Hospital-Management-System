@@ -1,8 +1,16 @@
+package Presentation;
+import BusinessLogic.Department;
+import BusinessLogic.Hospital;
+import BusinessLogic.Patient;
+import BusinessLogic.Wallet;
+import DataAccess.PatientDA;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class AddPatientPanel extends JPanel {
     private PatientDA patientDA=new PatientDA();
+
     public AddPatientPanel(Hospital hospital){
         setLayout(new BorderLayout(10,10));
         JPanel form=new JPanel(new GridLayout(8,2,10,10));
@@ -87,7 +95,6 @@ public class AddPatientPanel extends JPanel {
             boolean added = department.addPatient(p);
 
             if (added) {
-                p.setAssignedDepartment(department.getDepartmentName());
                 boolean saved = patientDA.insert(p);
                 if (saved) {
                     result.setText("Patient added successfully");

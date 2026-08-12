@@ -1,14 +1,26 @@
+package Presentation;
+import BusinessLogic.Department;
+import BusinessLogic.Doctor;
+import BusinessLogic.Hospital;
 import javax.swing.*;
 import java.awt.*;
 
 public class DoctorPanel extends JPanel {
-    public DoctorPanel(Hospital hospital){
+    private Hospital hospital;
+    private JTextArea area;
+    public DoctorPanel(Hospital hospital) {
+        this.hospital = hospital;
         setLayout(new BorderLayout());
-        JTextArea area=new JTextArea();
+        area = new JTextArea();
         area.setEditable(false);
-        JScrollPane scroll=new JScrollPane(area);
-        StringBuilder sb=new StringBuilder();
-        for (Department d :hospital.getDepartments()){
+        JScrollPane scroll = new JScrollPane(area);
+        add(scroll, BorderLayout.CENTER);
+        refresh();
+        refresh();
+    }
+    public void refresh() {
+        StringBuilder sb = new StringBuilder();
+        for (Department d : hospital.getDepartments()) {
             sb.append(d.getDepartmentName()).append("\n");
             if (d.getDoctors().isEmpty()) {
                 sb.append("No doctors\n");
@@ -23,7 +35,6 @@ public class DoctorPanel extends JPanel {
             sb.append("\n");
         }
         area.setText(sb.toString());
-        add(scroll, BorderLayout.CENTER);
     }
 }
 

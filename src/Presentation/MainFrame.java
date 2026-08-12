@@ -1,3 +1,9 @@
+package Presentation;
+
+import BusinessLogic.ConditionService;
+import BusinessLogic.FinanceManager;
+import BusinessLogic.Hospital;
+
 import javax.swing.*;
 import java.awt.*;
 

@@ -1,7 +1,9 @@
+package BusinessLogic;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Doctor extends Person{
+public class Doctor extends Person {
 
     private Department department;
     private int maxAppointments;

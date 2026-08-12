@@ -1,9 +1,11 @@
+package BusinessLogic;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 
-public class Patient extends Person{
+public class Patient extends Person {
     private int age;
     private List<String> medicalHistory;
     private String assignedDepartment;
@@ -12,7 +14,7 @@ public class Patient extends Person{
     private int queueNumber;
     private boolean isAdmitted;
     private Wallet wallet;
-    public Patient(String name,String id,String phoneNumber,int age,boolean isEmergency,boolean isAdmitted,Wallet wallet,String[]medicalHistory){
+    public Patient(String name, String id, String phoneNumber, int age, boolean isEmergency, boolean isAdmitted, Wallet wallet, String[]medicalHistory){
         super(name,id,phoneNumber);
         this.age=age;
         this.medicalHistory=new ArrayList<>(Arrays.asList(medicalHistory));
@@ -90,7 +92,7 @@ public class Patient extends Person{
         this.wallet = wallet;
     }
     public String getInfo(){
-        return super.getInfo()+" "+"Age:"+age+" "+"medicalHistory:"+medicalHistory+" "+"assignedDepartment:"+assignedDepartment+" "+"Doctor name:"+(doctor !=null ? doctor.getName() : "Null") +" " + "isEmergency:"+isEmergency()+" "+"queueNumber:"+queueNumber+" "+"isAdmitted:"+isAdmitted;
+        return super.getInfo()+" "+"Age:"+age+" "+"medicalHistory:"+medicalHistory+" "+"assignedDepartment:"+assignedDepartment+" "+"BusinessLogic.Doctor name:"+(doctor !=null ? doctor.getName() : "Null") +" " + "isEmergency:"+isEmergency()+" "+"queueNumber:"+queueNumber+" "+"isAdmitted:"+isAdmitted;
     }
     public void addMedicalHistory(String history){
         medicalHistory.add(history);

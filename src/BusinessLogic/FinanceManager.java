@@ -1,4 +1,6 @@
-public class FinanceManager extends Person{
+package BusinessLogic;
+
+public class FinanceManager extends Person {
         private double hospitalBudget;
 
         public FinanceManager(String name,String id,String phoneNumber,double hospitalBudget){
@@ -16,7 +18,7 @@ public class FinanceManager extends Person{
         public void addBudget(double amount){
             hospitalBudget+=amount;
         }
-        public boolean appointmentRevenue(Patient patient,Appointment appointment){
+        public boolean appointmentRevenue(Patient patient, Appointment appointment){
             double cost=appointment.getCost();
             if (patient.getWallet().withdraw(cost)){
                 hospitalBudget+=cost;
@@ -25,7 +27,7 @@ public class FinanceManager extends Person{
             }
             return false;
         }
-        public void serviceRevenue(Patient patient,Department department){
+        public void serviceRevenue(Patient patient, Department department){
             double cost=department.serviceCost();
             if (patient.getWallet().withdraw(cost)){
                 hospitalBudget+=cost;

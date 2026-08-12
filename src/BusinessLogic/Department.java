@@ -1,3 +1,4 @@
+package BusinessLogic;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ public class Department {
     private CostDeManager costDeManager;
     private double totalIncome;
 
-    public Department(String departmentName,int capacity,CostDeManager costDeManager,double totalIncome){
+    public Department(String departmentName, int capacity, CostDeManager costDeManager, double totalIncome){
         this.departmentName=departmentName;
         this.capacity=capacity;
         this.doctors=new ArrayList<>();
