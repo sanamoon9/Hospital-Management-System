@@ -19,7 +19,7 @@ public class Doctor extends Person{
         this.patients=new ArrayList<>();
 
     }
-
+    public Doctor(){}
     public void setDepartment(Department department) {
         this.department = department;
     }
@@ -79,7 +79,13 @@ public class Doctor extends Person{
     }
 
     public boolean addPatient(Patient patient){
+        if (patient==null){
+            return false;
+        }
         if(!hasAvailableAppointment()){
+            return false;
+        }
+        if (patients.contains(patient)){
             return false;
         }
         patients.add(patient);

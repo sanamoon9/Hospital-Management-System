@@ -16,12 +16,14 @@ public class FinanceManager extends Person{
         public void addBudget(double amount){
             hospitalBudget+=amount;
         }
-        public void appointmentRevenue(Patient patient,Appointment appointment){
+        public boolean appointmentRevenue(Patient patient,Appointment appointment){
             double cost=appointment.getCost();
             if (patient.getWallet().withdraw(cost)){
                 hospitalBudget+=cost;
                 appointment.getDepartment().addIncome(cost);
+                return true;
             }
+            return false;
         }
         public void serviceRevenue(Patient patient,Department department){
             double cost=department.serviceCost();

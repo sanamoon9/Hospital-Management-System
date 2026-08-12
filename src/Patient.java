@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -11,13 +12,16 @@ public class Patient extends Person{
     private int queueNumber;
     private boolean isAdmitted;
     private Wallet wallet;
-    public Patient(String name,String id,String phoneNumber,int age,boolean isEmergency,boolean isAdmitted,Wallet wallet ){
+    public Patient(String name,String id,String phoneNumber,int age,boolean isEmergency,boolean isAdmitted,Wallet wallet,String[]medicalHistory){
         super(name,id,phoneNumber);
         this.age=age;
-        this.medicalHistory=new ArrayList<>();
+        this.medicalHistory=new ArrayList<>(Arrays.asList(medicalHistory));
         this.isEmergency=isEmergency;
         this.isAdmitted=isAdmitted;
         this.wallet=wallet;
+    }
+    public Patient(){
+        this.medicalHistory=new ArrayList<>();
     }
     public int getAge() {
         return age;
@@ -91,7 +95,5 @@ public class Patient extends Person{
     public void addMedicalHistory(String history){
         medicalHistory.add(history);
     }
-
-
 
 }

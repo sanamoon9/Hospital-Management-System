@@ -2,12 +2,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConditionService {
-    public boolean isCriticalCondition(Hospital hospital,Patient patient,Department department){
+    private Hospital hospital;
+    public ConditionService(Hospital hospital){
+        this.hospital=hospital;
+    }
+    public boolean isCriticalCondition(){
       return hospital.isHospitalFull();
 
     }
-    public boolean isSuccessCondition(Department department){
-        return department.getPatients().isEmpty();
+    public boolean isSuccessCondition(){
+        for (Department department: hospital.getAllDepartments()){
+            if (!department.getPatients().isEmpty()){
+                return false;
+            }
+        }
+        return true;
     }
 
 }

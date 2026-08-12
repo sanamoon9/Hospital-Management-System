@@ -11,16 +11,26 @@ public class DatabaseManager {
     }
     public static void createTables(){
         String patientTable = "CREATE TABLE IF NOT EXISTS patients (" +
-                "id TEXT PRIMARY KEY," +
                 "name TEXT," +
-                "age INTEGER" +
+                "id TEXT PRIMARY KEY," +
+                "phoneNumber TEXT,"+
+                "age INTEGER," +
+                "isEmergency INTEGER,"+
+                "isAdmitted INTEGER,"+
+                "wallet REAL,"+
+                "medicalHistory TEXT,"+
+                "assignedDepartment TEXT"+
                 ");";
 
         String appointmentTable = "CREATE TABLE IF NOT EXISTS appointments (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "patientId TEXT," +
+                "date TEXT," +
                 "doctorId TEXT," +
-                "date TEXT" +
+                "patientId TEXT," +
+                "status TEXT,"+
+                " appointmentNum INTEGER,"+
+                "isEmergency INTEGER,"+
+                "departmentName TEXT"+
                 ");";
 
         String financeTable = "CREATE TABLE IF NOT EXISTS finance (" +
