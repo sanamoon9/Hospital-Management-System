@@ -7,8 +7,12 @@ import java.time.LocalDateTime;
 
 public class AppointmentPanel extends JPanel {
     private AppointmentDA appointmentDA=new AppointmentDA();
+    private Hospital hospital;
+    private FinanceManager financeManager;
     private DoctorPanel doctorPanel;
     public AppointmentPanel(Hospital hospital, FinanceManager financeManager) {
+        this.hospital=hospital;
+        this.financeManager=financeManager;
         setLayout(new BorderLayout(10, 10));
         JPanel form = new JPanel(new GridLayout(5, 2, 10, 10));
         JComboBox<String> dep = new JComboBox<>();
@@ -24,15 +28,8 @@ public class AppointmentPanel extends JPanel {
         }
 
         dep.addActionListener(e -> {
-            loadDoctors(doc,hospital,(String) dep.getSelectedItem());
-            doc.removeAllItems();
             String depName = (String) dep.getSelectedItem();
-            Department depar = hospital.findDepartmentByName(depName);
-            if (depar != null) {
-                for (Doctor doctor : depar.getDoctors()) {
-                    doc.addItem(doctor.getName());
-                }
-            }
+            loadDoctors(doc,hospital,(String) dep.getSelectedItem());
 
         });
         form.add(new JLabel("Department:"));
@@ -72,22 +69,45 @@ public class AppointmentPanel extends JPanel {
                 return;
             }
 
-            String patiId = patientId.getText();
+            String patiId = patientId.getText().trim();
+            if (patiId.isEmpty()){
+                result.setText("Enter patient id");
+                return;
+            }
             Patient p = hospital.findPatientById(patiId);
 
             if (p == null) {
                 result.setText("Patient not found");
                 return;
             }
-
+            if (p.getAssignedDepartment() != null && !p.getAssignedDepartment().equalsIgnoreCase(de.getDepartmentName())) {
+                result.setText("Patient belongs to another department");
+                return;
+            }
             boolean isEmergency = emergency.isSelected();
+            LocalDateTime now=LocalDateTime.now();
+            int currentHour = now.getHour();
 
-            LocalDateTime now = LocalDateTime.now();
+            if (!selectedDoctor.isAvailableInShift(currentHour)) {
+
+                result.setText("Doctor is not in shift. Shift: " + selectedDoctor.getStartHour() + "-" + selectedDoctor.getEndHour());
+                return;
+            }
+
             int appointmentNumber=appointmentDA.getNextAppointmentNumber();
             Appointment ap = new Appointment(now, selectedDoctor, p, "Scheduled",appointmentNumber, isEmergency, de);
+            double visitCost = ap.getCost();
 
-            if (!ap.isInDoctorShift()) {
-                result.setText("Doctor not in shift");
+            double serviceCost = 0;
+            if (de.getCostDeManager() != null) {
+                serviceCost = de.getCostDeManager().calculateCost(1);
+            }
+
+            double totalCost = visitCost + serviceCost;
+
+            if (p.getWallet() == null || p.getWallet().getBalance() < totalCost) {
+
+                result.setText("Not enough wallet balance. Total cost: " + totalCost);
                 return;
             }
 
@@ -97,14 +117,17 @@ public class AppointmentPanel extends JPanel {
                 return;
             }
 
-            JOptionPane.showMessageDialog(this, "Appointment Registered");
-            result.setText(" Cost: " + ap.getCost());
+            JOptionPane.showMessageDialog(this, "Appointment Registered"+"Visit cost: " + visitCost + "\nService cost: " + serviceCost + "\nTotal: " + totalCost);
+            result.setText(" TotalCost: " +totalCost);
         });
     }
 
 
         private void loadDoctors(JComboBox<String> doc, Hospital hospital, String depName) {
             doc.removeAllItems();
+            if (depName==null){
+                return;
+            }
             Department d = hospital.findDepartmentByName(depName);
             if (d != null) {
                 for (Doctor doctor : d.getDoctors()) {

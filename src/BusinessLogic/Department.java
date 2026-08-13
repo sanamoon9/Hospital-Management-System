@@ -4,24 +4,26 @@ import java.util.List;
 
 public class Department {
     private String departmentName;
-    private List<Doctor>doctors;
-    private List<Patient>patients;
+    private List<Doctor> doctors;
+    private List<Patient> patients;
     private int capacity;
     private CostDeManager costDeManager;
     private double totalIncome;
 
-    public Department(String departmentName, int capacity, CostDeManager costDeManager, double totalIncome){
-        this.departmentName=departmentName;
-        this.capacity=capacity;
-        this.doctors=new ArrayList<>();
-        this.patients=new ArrayList<>();
-        this.costDeManager=costDeManager;
-        this.totalIncome=totalIncome;
+    public Department(String departmentName, int capacity, CostDeManager costDeManager, double totalIncome) {
+        this.departmentName = departmentName;
+        this.capacity = capacity;
+        this.doctors = new ArrayList<>();
+        this.patients = new ArrayList<>();
+        this.costDeManager = costDeManager;
+        this.totalIncome = totalIncome;
 
     }
+
     public int getCapacity() {
         return capacity;
     }
+
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
@@ -34,10 +36,11 @@ public class Department {
         this.departmentName = departmentName;
     }
 
-    public List<Doctor> getDoctors(){
+    public List<Doctor> getDoctors() {
         return doctors;
     }
-    public List<Patient> getPatients(){
+
+    public List<Patient> getPatients() {
         return patients;
     }
 
@@ -58,68 +61,115 @@ public class Department {
         this.costDeManager = costDeManager;
     }
 
-    public void addDoctor(Doctor doctor){
-        if (!doctors.contains(doctor)){
+    public void addDoctor(Doctor doctor) {
+        if (!doctors.contains(doctor) && doctor != null) {
             doctors.add(doctor);
             doctor.setDepartment(this);
         }
 
     }
 
-    public void removeDoctor(Doctor doctor){
+    public void removeDoctor(Doctor doctor) {
         doctors.remove(doctor);
     }
 
-    public boolean isFull(){
-       if(patients.size()>=capacity){
-           return true;
-       }
-       return false;
-    }
-
-    public boolean addPatient(Patient patient){
-       if(isFull()){
-           return false;
-       }
-       patients.add(patient);
-       patient.setAssignedDepartment(departmentName);
-       return true;
-    }
-    public void removePatient(Patient patient){
-        patients.remove(patient);
-        for(Doctor d: doctors){
-            d.removePatient(patient);
+    public boolean isFull() {
+        if (patients.size() >= capacity) {
+            return true;
         }
+        return false;
     }
-    public boolean assignPatientToDoctor(Patient patient, Doctor doctor, int hour) {
 
-        if (patient==null || doctor==null){
+    public boolean addPatient(Patient patient) {
+        if (patient == null) {
             return false;
         }
-        if (isFull()){
+        if (patients.contains(patient)) {
+            return true;
+        }
+        if (isFull()) {
+            return false;
+        }
+        patients.add(patient);
+        patient.setAssignedDepartment(departmentName);
+        return true;
+    }
+
+    public boolean addEmergencyPatient(Patient patient) {
+
+        if (patient == null || !patient.isEmergency()) {
+            return false;
+        }
+
+        if (patients.contains(patient)) {
+            return true;
+        }
+
+        patients.add(patient);
+
+        patient.setAssignedDepartment(departmentName);
+        patient.setAdmitted(true);
+
+        return true;
+    }
+
+    public boolean removePatient(Patient patient) {
+        if (patient == null) {
+            return false;
+        }
+        boolean removed = patients.remove(patient);
+        if (removed) {
+            for (Doctor d : doctors) {
+                d.removePatient(patient);
+            }
+            patient.setDoctor(null);
+            patient.setAdmitted(false);
+            patient.setAssignedDepartment(null);
+        }
+        return removed;
+    }
+
+    public boolean assignPatientToDoctor(Patient patient, Doctor doctor, int hour) {
+
+        if (patient == null || doctor == null) {
             return false;
         }
         if (!doctor.isAvailableInShift(hour)) {
             return false;
         }
-
-        if (!doctor.hasAvailableAppointment()) {
+        if (!doctor.hasAvailableAppointment() && !doctor.getPatients().contains(patient)) {
             return false;
         }
         if (!patients.contains(patient)) {
-            if (!addPatient(patient)) {
-                return false;
+            if (patient.isEmergency()) {
+                if (!addEmergencyPatient(patient)) {
+                    return false;
+                }
+            } else {
+                if (!addPatient(patient)) {
+                    return false;
+                }
             }
         }
-
-        if (doctor.addPatient(patient)) {
+        if (doctor.getPatients().contains(patient)) {
             patient.setDoctor(doctor);
+            patient.setAdmitted(true);
             return true;
         }
-        return false;
+
+        if (!doctor.addPatient(patient)) {
+            return false;
+        }
+        patient.setDoctor(doctor);
+        patient.setAdmitted(true);
+
+        return true;
     }
+
     public void addIncome(double amount){
-        totalIncome+=amount;
+        if (amount>0) {
+            totalIncome += amount;
+        }
     }
     public double getBonus(){
         if (patients.isEmpty()){
@@ -128,6 +178,9 @@ public class Department {
         return 0;
     }
     public double serviceCost(){
+        if (costDeManager==null){
+            return 0;
+        }
         return costDeManager.calculateCost(patients.size());
     }
     public String getInfo(){

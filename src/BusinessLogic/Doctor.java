@@ -21,7 +21,9 @@ public class Doctor extends Person {
         this.patients=new ArrayList<>();
 
     }
-    public Doctor(){}
+    public Doctor(){
+        this.patients=new ArrayList<>();
+    }
     public void setDepartment(Department department) {
         this.department = department;
     }
@@ -88,7 +90,7 @@ public class Doctor extends Person {
             return false;
         }
         if (patients.contains(patient)){
-            return false;
+            return true;
         }
         patients.add(patient);
         return true;

@@ -1,8 +1,5 @@
 package Presentation;
-import BusinessLogic.Department;
-import BusinessLogic.Hospital;
-import BusinessLogic.Patient;
-import BusinessLogic.Wallet;
+import BusinessLogic.*;
 import DataAccess.PatientDA;
 
 import javax.swing.*;
@@ -94,18 +91,19 @@ public class AddPatientPanel extends JPanel {
 
             boolean added = department.addPatient(p);
 
-            if (added) {
+                if (!added) {
+                    result.setText("Department is Full");
+                    return;
+                }
                 boolean saved = patientDA.insert(p);
                 if (saved) {
-                    result.setText("Patient added successfully");
-                } else {
-                    department.removePatient(p);
-
-                    result.setText("Error saving patient");
+                  result.setText("Patient added successfully");
                 }
-            } else {
-                result.setText("Department is full!");
-            }
+                else {
+                    department.removePatient(p);
+                    result.setText("we cant save patient");
+                }
+
             nameT.setText("");
             idT.setText("");
             phonT.setText("");

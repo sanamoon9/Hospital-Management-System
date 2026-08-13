@@ -16,7 +16,6 @@ public class DoctorPanel extends JPanel {
         JScrollPane scroll = new JScrollPane(area);
         add(scroll, BorderLayout.CENTER);
         refresh();
-        refresh();
     }
     public void refresh() {
         StringBuilder sb = new StringBuilder();

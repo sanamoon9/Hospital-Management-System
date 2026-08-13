@@ -52,6 +52,38 @@ public class PatientDA {
         }
 
     }
+    public boolean updatePatient(Patient patient) {
+
+        if (patient == null) {
+            return false;
+        }
+
+        String sql =
+                "UPDATE patients SET " +
+                        "isEmergency=?, " +
+                        "isAdmitted=?, " +
+                        "wallet=?, " +
+                        "medicalHistory=?, " +
+                        "assignedDepartment=? " +
+                        "WHERE id=?";
+
+        try (Connection conn = DatabaseManager.connect();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, patient.isEmergency() ? 1 : 0);
+            stmt.setInt(2, patient.isAdmitted() ? 1 : 0);
+            stmt.setDouble(3, patient.getWallet().getBalance());
+            String history = String.join(",", patient.getMedicalHistory());
+            stmt.setString(4, history);
+            stmt.setString(5, patient.getAssignedDepartment());
+            stmt.setString(6, patient.getId());
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     public List<Patient> loadAllPatients() {
 

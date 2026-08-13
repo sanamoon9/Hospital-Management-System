@@ -50,7 +50,7 @@ public class AppointmentDA {
         return 1;
     }
 
-    public List<Appointment> getAllAppointments() {
+    public List<Appointment> loadAllAppointments() {
         List<Appointment> list = new ArrayList<>();
 
         String sql = "SELECT * FROM appointments";

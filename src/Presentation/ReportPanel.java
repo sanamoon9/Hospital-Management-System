@@ -7,13 +7,22 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ReportPanel extends JPanel {
-
+    private Hospital hospital;
+    private FinanceManager financeManager;
+    private ConditionService conditionService;
+    private JTextArea area;
     public ReportPanel(Hospital hospital, FinanceManager financeManager, ConditionService conditionService) {
-
+        this.hospital = hospital;
+        this.financeManager = financeManager;
+        this.conditionService = conditionService;
         setLayout(new BorderLayout());
-        JTextArea area = new JTextArea();
+        area = new JTextArea();
         area.setEditable(false);
         JScrollPane scroll = new JScrollPane(area);
+        add(scroll, BorderLayout.CENTER);
+        refresh();
+    }
+    public void refresh(){
         StringBuilder sb = new StringBuilder();
         for (Department d : hospital.getDepartments()) {
             sb.append("departmentName: ").append(d.getDepartmentName()).append("\n");
@@ -32,7 +41,7 @@ public class ReportPanel extends JPanel {
             sb.append(" Hospital Status: NORMAL\n");
         }
         area.setText(sb.toString());
-        add(scroll, BorderLayout.CENTER);
+
     }
 }
 
