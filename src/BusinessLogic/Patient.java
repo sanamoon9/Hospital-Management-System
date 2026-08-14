@@ -12,14 +12,12 @@ public class Patient extends Person {
     private Doctor doctor;
     private boolean isEmergency;
     private int queueNumber;
-    private boolean isAdmitted;
     private Wallet wallet;
-    public Patient(String name, String id, String phoneNumber, int age, boolean isEmergency, boolean isAdmitted, Wallet wallet, String[]medicalHistory){
+    public Patient(String name, String id, String phoneNumber, int age, boolean isEmergency, Wallet wallet, String[]medicalHistory){
         super(name,id,phoneNumber);
         this.age=age;
         this.medicalHistory=new ArrayList<>(Arrays.asList(medicalHistory));
         this.isEmergency=isEmergency;
-        this.isAdmitted=isAdmitted;
         this.wallet=wallet;
     }
     public Patient(){
@@ -77,13 +75,6 @@ public class Patient extends Person {
         this.queueNumber = queueNumber;
     }
 
-    public boolean isAdmitted() {
-        return isAdmitted;
-    }
-
-    public void setAdmitted(boolean admitted) {
-        isAdmitted = admitted;
-    }
     public Wallet getWallet() {
         return wallet;
     }
@@ -92,7 +83,7 @@ public class Patient extends Person {
         this.wallet = wallet;
     }
     public String getInfo(){
-        return super.getInfo()+" "+"Age:"+age+" "+"medicalHistory:"+medicalHistory+" "+"assignedDepartment:"+assignedDepartment+" "+"BusinessLogic.Doctor name:"+(doctor !=null ? doctor.getName() : "Null") +" " + "isEmergency:"+isEmergency()+" "+"queueNumber:"+queueNumber+" "+"isAdmitted:"+isAdmitted;
+        return super.getInfo()+" "+"Age:"+age+" "+"medicalHistory:"+medicalHistory+" "+"assignedDepartment:"+assignedDepartment+" "+"BusinessLogic.Doctor name:"+(doctor !=null ? doctor.getName() : "Null") +" " + "isEmergency:"+isEmergency()+" "+"queueNumber:"+queueNumber;
     }
     public void addMedicalHistory(String history){
         medicalHistory.add(history);

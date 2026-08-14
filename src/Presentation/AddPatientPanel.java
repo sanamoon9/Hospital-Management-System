@@ -10,7 +10,7 @@ public class AddPatientPanel extends JPanel {
 
     public AddPatientPanel(Hospital hospital){
         setLayout(new BorderLayout(10,10));
-        JPanel form=new JPanel(new GridLayout(8,2,10,10));
+        JPanel form=new JPanel(new GridLayout(7,2,10,10));
         JTextField nameT =new JTextField();
         JTextField ageT=new JTextField();
         JTextField phonT=new JTextField();
@@ -24,7 +24,6 @@ public class AddPatientPanel extends JPanel {
             dep.addItem(d.getDepartmentName());
         }
         JCheckBox emergency=new JCheckBox("Emergency");
-        JCheckBox admitted=new JCheckBox("Admitted");
         form.add(new JLabel("Name:"));
         form.add(nameT);
         form.add(new JLabel("Age:"));
@@ -39,8 +38,6 @@ public class AddPatientPanel extends JPanel {
         form.add(dep);
         form.add(new JLabel("Emergency:"));
         form.add(emergency);
-        form.add(new JLabel("Admitted:"));
-        form.add(admitted);
         JPanel but=new JPanel();
         JButton btn=new JButton("Add Patient");
         JLabel result = new JLabel();
@@ -81,17 +78,21 @@ public class AddPatientPanel extends JPanel {
                 return;
             }
             boolean isEmergency=emergency.isSelected();
-            boolean isAdmitted=admitted.isSelected();
 
-            Patient p = new Patient(name,id,phoneNumber,age,isEmergency,isAdmitted,wallet,new String[0]);
+            Patient p = new Patient(name,id,phoneNumber,age,isEmergency,wallet,new String[0]);
             if (patientDA.existsById(id)) {
                 result.setText("Patient with this ID already exists!");
                 return;
             }
 
-            boolean added = department.addPatient(p);
-
-                if (!added) {
+            boolean added ;
+             if (isEmergency){
+                 added=department.addEmergencyPatient(p);
+             }
+             else {
+                 added = department.addPatient(p);
+             }
+                if (!added){
                     result.setText("Department is Full");
                     return;
                 }

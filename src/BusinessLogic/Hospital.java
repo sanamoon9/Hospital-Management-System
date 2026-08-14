@@ -88,11 +88,14 @@ public class Hospital {
    }
 
    public boolean addEmergencyPatient(Patient patient , Department department){
-     if (!patient.isEmergency()){
-         return false;
-     }
-     department.addPatient(patient);
-     return true;
+        if (patient==null || department==null){
+            return false;
+        }
+        if (!patient.isEmergency()){
+            return false;
+        }
+        department.addEmergencyPatient(patient);
+            return true;
    }
 
     public boolean dischargePatient(Patient patient, Department department){
@@ -102,25 +105,16 @@ public class Hospital {
         if (!department.getPatients().contains(patient)) {
             return false;
         }
-
         boolean removed = department.removePatient(patient);
-
         if (!removed) {
             return false;
         }
-
-        patient.setAdmitted(false);
         patient.setAssignedDepartment(null);
-
         patientDA.updatePatient(patient);
-
         if (department.getPatients().isEmpty()) {
-
             financeManager.addBonus(department);
-
             financeDA.addDailyIncome(LocalDate.now().toString(), 500);
         }
-        department.removePatient(patient);
         return true;
 
     }
@@ -148,29 +142,26 @@ public class Hospital {
         if (!doctor.isAvailableInShift(appointment.getAppointmentTime().getHour())) {
             return false;
         }
+        Patient patient1=findPatientById(patient.getId());
+        if (patient1!=null){
+            patient=patient1;
+        }
+        boolean patientInDepartment=patient1!=null && department.getPatients().contains(patient1);
         int appointmentHour=appointment.getAppointmentTime().getHour();
 
         if (!doctor.hasAvailableAppointment() && !doctor.getPatients().contains(patient)) {
             return false;
         }
-
-        if (patient.getWallet() == null || patient.getWallet().getBalance() < appointment.getCost()) {
-            return false;
+        if (!patientInDepartment && !patient.isEmergency()&&department.isFull()){
+           return false;
         }
-        Patient patient1=findPatientById(patient.getId());
-        boolean patientInDepartment=patient1!=null;
+
         if (isHospitalFull()&& !patientInDepartment) {
             return false;
         }
-        if (patientInDepartment ){
-            patient=patient1;
-        }
-        if (!department.getPatients().contains(patient)&& department.isFull()){
-            return false;
-        }
+
         double visitCost = appointment.getCost();
         double serviceCost = 0;
-
         if (department.getCostDeManager() != null) {
             serviceCost = department.getCostDeManager().calculateCost(1);
         }
@@ -179,6 +170,7 @@ public class Hospital {
         if (patient.getWallet() == null || patient.getWallet().getBalance() < totalCost) {
             return false;
         }
+
 
         boolean assigned = department.assignPatientToDoctor(patient, doctor, appointmentHour);
 

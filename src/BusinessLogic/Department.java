@@ -108,7 +108,6 @@ public class Department {
         patients.add(patient);
 
         patient.setAssignedDepartment(departmentName);
-        patient.setAdmitted(true);
 
         return true;
     }
@@ -123,7 +122,6 @@ public class Department {
                 d.removePatient(patient);
             }
             patient.setDoctor(null);
-            patient.setAdmitted(false);
             patient.setAssignedDepartment(null);
         }
         return removed;
@@ -134,26 +132,23 @@ public class Department {
         if (patient == null || doctor == null) {
             return false;
         }
+        if (isFull()&& !patient.isEmergency()&&!patients.contains(patient)){
+            return false;
+        }
         if (!doctor.isAvailableInShift(hour)) {
             return false;
         }
-        if (!doctor.hasAvailableAppointment() && !doctor.getPatients().contains(patient)) {
+        if (!doctor.hasAvailableAppointment() ) {
             return false;
         }
         if (!patients.contains(patient)) {
-            if (patient.isEmergency()) {
-                if (!addEmergencyPatient(patient)) {
+           if (!addPatient(patient)){
                     return false;
-                }
-            } else {
-                if (!addPatient(patient)) {
-                    return false;
-                }
+
             }
         }
         if (doctor.getPatients().contains(patient)) {
             patient.setDoctor(doctor);
-            patient.setAdmitted(true);
             return true;
         }
 
@@ -161,7 +156,6 @@ public class Department {
             return false;
         }
         patient.setDoctor(doctor);
-        patient.setAdmitted(true);
 
         return true;
     }

@@ -31,7 +31,7 @@ public class PatientDA {
         if (existsById(patient.getId())){
             return false;
         }
-        String sql = "INSERT INTO patients(name,id,phoneNumber,age,isEmergency,isAdmitted,wallet,medicalHistory,assignedDepartment) VALUES(?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO patients(name,id,phoneNumber,age,isEmergency,wallet,medicalHistory,assignedDepartment) VALUES(?,?,?,?,?,?,?,?)";
         try (Connection conn = DatabaseManager.connect();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, patient.getName());
@@ -39,11 +39,10 @@ public class PatientDA {
             stmt.setString(3, patient.getPhoneNumber());
             stmt.setInt(4, patient.getAge());
             stmt.setInt(5, patient.isEmergency() ? 1 : 0);
-            stmt.setInt(6, patient.isAdmitted() ? 1 : 0);
-            stmt.setDouble(7, patient.getWallet().getBalance());
+            stmt.setDouble(6, patient.getWallet().getBalance());
             String medicalHistory = String.join(",", patient.getMedicalHistory());
-            stmt.setString(8, medicalHistory);
-            stmt.setString(9,patient.getAssignedDepartment());
+            stmt.setString(7, medicalHistory);
+            stmt.setString(8,patient.getAssignedDepartment());
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -61,7 +60,6 @@ public class PatientDA {
         String sql =
                 "UPDATE patients SET " +
                         "isEmergency=?, " +
-                        "isAdmitted=?, " +
                         "wallet=?, " +
                         "medicalHistory=?, " +
                         "assignedDepartment=? " +
@@ -71,12 +69,11 @@ public class PatientDA {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, patient.isEmergency() ? 1 : 0);
-            stmt.setInt(2, patient.isAdmitted() ? 1 : 0);
-            stmt.setDouble(3, patient.getWallet().getBalance());
+            stmt.setDouble(2, patient.getWallet().getBalance());
             String history = String.join(",", patient.getMedicalHistory());
-            stmt.setString(4, history);
-            stmt.setString(5, patient.getAssignedDepartment());
-            stmt.setString(6, patient.getId());
+            stmt.setString(3, history);
+            stmt.setString(4, patient.getAssignedDepartment());
+            stmt.setString(5, patient.getId());
             return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
@@ -102,15 +99,13 @@ public class PatientDA {
                 String phoneNumber = rs.getString("phoneNumber");
                 int age = rs.getInt("age");
                 boolean isEmergency = rs.getInt("isEmergency") == 1;
-                boolean isAdmitted = rs.getInt("isAdmitted") == 1;
                 double wallet = rs.getDouble("wallet");
                 Wallet wallet1 = new Wallet(wallet);
                 String historyStr = rs.getString("medicalHistory");
                 String[] medicalHistory = historyStr != null ? historyStr.split(",") : new String[0];
                 String departmentName=rs.getString("assignedDepartment");
-                Patient p = new Patient(name, id, phoneNumber, age, isEmergency, isAdmitted, wallet1,medicalHistory);
+                Patient p = new Patient(name, id, phoneNumber, age, isEmergency, wallet1,medicalHistory);
                 p.setEmergency(isEmergency);
-                p.setAdmitted(isAdmitted);
                 p.getWallet().setBalance(wallet);
                 p.setAssignedDepartment(departmentName);
 

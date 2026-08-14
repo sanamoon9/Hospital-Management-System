@@ -18,6 +18,7 @@ public class AppointmentPanel extends JPanel {
         JComboBox<String> dep = new JComboBox<>();
         JComboBox<String> doc = new JComboBox<>();
         JTextField patientId = new JTextField();
+        JTextField medicalHistory=new JTextField();
         JCheckBox emergency = new JCheckBox("Emergency");
         for (Department department : hospital.getDepartments()) {
             dep.addItem(department.getDepartmentName());
@@ -40,6 +41,8 @@ public class AppointmentPanel extends JPanel {
         form.add(patientId);
         form.add(new JLabel("Emergency:"));
         form.add(emergency);
+        form.add(new JLabel("Medical History"));
+        form.add(medicalHistory);
         JPanel but = new JPanel();
         JButton btn = new JButton("Add Appointment");
         JLabel result = new JLabel();
@@ -80,6 +83,12 @@ public class AppointmentPanel extends JPanel {
                 result.setText("Patient not found");
                 return;
             }
+            String disease = medicalHistory.getText().trim();
+            if (disease.isEmpty()) {
+                result.setText("Enter patient's disease");
+                return;
+            }
+            p.addMedicalHistory(disease);
             if (p.getAssignedDepartment() != null && !p.getAssignedDepartment().equalsIgnoreCase(de.getDepartmentName())) {
                 result.setText("Patient belongs to another department");
                 return;

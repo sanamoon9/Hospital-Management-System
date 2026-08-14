@@ -18,7 +18,6 @@ public class DatabaseManager {
                 "phoneNumber TEXT,"+
                 "age INTEGER," +
                 "isEmergency INTEGER,"+
-                "isAdmitted INTEGER,"+
                 "wallet REAL,"+
                 "medicalHistory TEXT,"+
                 "assignedDepartment TEXT"+

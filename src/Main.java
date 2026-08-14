@@ -16,7 +16,7 @@ public class Main {
         hospital.addDepartment(emergencyDep);
         hospital.addDepartment(surgeryDep);
         hospital.addDepartment(internalDep);
-        Doctor emergencyDoc=new Doctor("Nill Ahmadi","D1","0987777",70,"Emergency",8,14);
+        Doctor emergencyDoc=new Doctor("Nill Ahmadi","D1","0987777",70,"Emergency",8,22);
         Doctor internalDoc=new Doctor("Reza hoseiny","D2","098779",70,"Internal",10,18);
         Doctor surgeryDoc=new Doctor("Nafas Akbari","D3","09655",70,"Surgery",9,22);
         hospital.addDoctor(emergencyDoc,emergencyDep);
@@ -25,9 +25,9 @@ public class Main {
         PatientDA patientDA=new PatientDA();
         List<Patient> patientList=patientDA.loadAllPatients();
         if (patientList.isEmpty()){
-            Patient patient1=new Patient("Sana Hasani","p1","097776",20,true,false,new Wallet(300),new String[]{"Fever,Headache"});
-            Patient patient2=new Patient("Samira Ahmadi","p2","0977888",40,false,true,new Wallet(500),new String[]{"Diabetes"});
-            Patient patient3=new Patient("Salar rezai","p3","09767",16,false,false,new Wallet(300),new String[]{"Cold"});
+            Patient patient1=new Patient("Sana Hasani","p1","097776",20,false,new Wallet(300),new String[]{"Fever,Headache"});
+            Patient patient2=new Patient("Samira Ahmadi","p2","0977888",40,false,new Wallet(500),new String[]{"Diabetes"});
+            Patient patient3=new Patient("Salar rezai","p3","09767",16,false,new Wallet(300),new String[]{"Cold"});
             emergencyDep.addPatient(patient1);
             internalDep.addPatient(patient3);
             surgeryDep.addPatient(patient2);

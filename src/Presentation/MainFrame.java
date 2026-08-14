@@ -22,11 +22,13 @@ public class MainFrame extends JFrame {
         ReportPanel reportPanel= new ReportPanel(hospital, financeManager, conditionService);
         DoctorPanel doctorPanel= new DoctorPanel(hospital);
         DischargePanel dischargePanel=new DischargePanel(hospital);
+        MedicalHistoryPanel medicalHistoryPanel=new MedicalHistoryPanel(hospital);
         menu.add("Add Patient",  addPatientPanel);
         menu.add("Appointment", appointmentPanel);
         menu.add("Reports",reportPanel);
         menu.add("Doctors", doctorPanel);
         menu.add("Discharge",dischargePanel);
+        menu.add("Medical History",medicalHistoryPanel);
         menu.addChangeListener(e -> {
             reportPanel.refresh();
             doctorPanel.refresh();
