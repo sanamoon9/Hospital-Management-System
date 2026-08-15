@@ -126,7 +126,7 @@ public class AppointmentPanel extends JPanel {
                 return;
             }
 
-            JOptionPane.showMessageDialog(this, "Appointment Registered"+"Visit cost: " + visitCost + "\nService cost: " + serviceCost + "\nTotal: " + totalCost);
+            JOptionPane.showMessageDialog(this, "Appointment Registered"+"AppointmentNumber:"+appointmentNumber+"Visit cost: " + visitCost + "\nService cost: " + serviceCost + "\nTotal: " + totalCost);
             result.setText(" TotalCost: " +totalCost);
         });
     }

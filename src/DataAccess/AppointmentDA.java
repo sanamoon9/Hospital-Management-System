@@ -83,5 +83,44 @@ public class AppointmentDA {
 
         return list;
     }
+    public void removePatientAppointment(String patientId) {
+
+        String deleteSql = "DELETE FROM appointments WHERE patientId = ?";
+        String selectSql = "SELECT id FROM appointments ORDER BY appointmentNum ASC";
+        String updateSql = "UPDATE appointments SET appointmentNum = ? WHERE id = ?";
+
+        try (Connection conn = DatabaseManager.connect()) {
+
+            conn.setAutoCommit(false);
+
+            try (PreparedStatement deleteStmt = conn.prepareStatement(deleteSql)) {
+                deleteStmt.setString(1, patientId);
+                deleteStmt.executeUpdate();
+            }
+
+
+            try (PreparedStatement selectStmt = conn.prepareStatement(selectSql);
+                 ResultSet rs = selectStmt.executeQuery();
+                 PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
+
+                int number = 1;
+
+                while (rs.next()) {
+                    int appointmentId = rs.getInt("id");
+
+                    updateStmt.setInt(1, number);
+                    updateStmt.setInt(2, appointmentId);
+                    updateStmt.executeUpdate();
+
+                    number++;
+                }
+            }
+
+            conn.commit();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
 

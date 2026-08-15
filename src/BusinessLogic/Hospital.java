@@ -105,6 +105,15 @@ public class Hospital {
         if (!department.getPatients().contains(patient)) {
             return false;
         }
+        appointmentDA.removePatientAppointment(patient.getId());
+
+        appointments.removeIf(a -> a.getPatient() != null && patient.getId().equals(a.getPatient().getId()));
+        int number = 1;
+
+        for (Appointment a : appointments) {
+            a.setAppointmentNum(number);
+            number++;
+        }
         boolean removed = department.removePatient(patient);
         if (!removed) {
             return false;
