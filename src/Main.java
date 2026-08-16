@@ -1,5 +1,6 @@
 
 import BusinessLogic.*;
+import DataAccess.AppointmentDA;
 import DataAccess.DatabaseManager;
 import DataAccess.PatientDA;
 import Presentation.MainFrame;
@@ -9,21 +10,23 @@ public class Main {
     public static void main(String[] args){
         DatabaseManager.createTables();
         FinanceManager financeManager=new FinanceManager("Ali","F1","09198888",1000);
-        Hospital hospital=new Hospital("Gold",financeManager,16);
+        Hospital hospital=new Hospital("Gold",financeManager,10);
         Department internalDep=new Department("Internal",3,new InternalCost(),0);
-        Department surgeryDep=new Department("Surgery",10,new SurgeryCost(),0);
+        Department surgeryDep=new Department("Surgery",4,new SurgeryCost(),0);
         Department emergencyDep=new Department("Emergency",3,new EmergencyCost(),0);
         hospital.addDepartment(emergencyDep);
         hospital.addDepartment(surgeryDep);
         hospital.addDepartment(internalDep);
-        Doctor emergencyDoc=new Doctor("Nill Ahmadi","D1","0987777",70,"Emergency",8,22);
-        Doctor internalDoc=new Doctor("Reza hoseiny","D2","098779",70,"Internal",10,18);
-        Doctor surgeryDoc=new Doctor("Nafas Akbari","D3","09655",70,"Surgery",9,22);
+        Doctor emergencyDoc=new Doctor("Nill Ahmadi","D1","0987777",70,"Emergency",2,22);
+        Doctor internalDoc=new Doctor("Reza hoseiny","D2","098779",70,"Internal",2,18);
+        Doctor surgeryDoc=new Doctor("Nafas Akbari","D3","09655",70,"Surgery",1,22);
         hospital.addDoctor(emergencyDoc,emergencyDep);
         hospital.addDoctor(internalDoc,internalDep);
         hospital.addDoctor(surgeryDoc,surgeryDep);
         PatientDA patientDA=new PatientDA();
         List<Patient> patientList=patientDA.loadAllPatients();
+        AppointmentDA appointmentDA=new AppointmentDA();
+        List<Appointment>appointments =appointmentDA.loadAllAppointments();
         if (patientList.isEmpty()){
             Patient patient1=new Patient("Sana Hasani","p1","097776",20,false,new Wallet(300),new String[]{"Fever,Headache"});
             Patient patient2=new Patient("Samira Ahmadi","p2","0977888",40,false,new Wallet(500),new String[]{"Diabetes"});
@@ -58,6 +61,9 @@ public class Main {
                 }
             }
         }
+       if (appointments !=null){
+           hospital.getAppointments().addAll(appointments);
+       }
         javax.swing.SwingUtilities.invokeLater(() -> {
             MainFrame mainFrame = new MainFrame(hospital, financeManager, hospital.getConditionService());
             mainFrame.setVisible(true);

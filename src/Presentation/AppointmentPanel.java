@@ -1,6 +1,8 @@
 package Presentation;
 import BusinessLogic.*;
 import DataAccess.AppointmentDA;
+import DataAccess.PatientDA;
+
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDateTime;
@@ -9,7 +11,6 @@ public class AppointmentPanel extends JPanel {
     private AppointmentDA appointmentDA=new AppointmentDA();
     private Hospital hospital;
     private FinanceManager financeManager;
-    private DoctorPanel doctorPanel;
     public AppointmentPanel(Hospital hospital, FinanceManager financeManager) {
         this.hospital=hospital;
         this.financeManager=financeManager;
@@ -88,7 +89,7 @@ public class AppointmentPanel extends JPanel {
                 result.setText("Enter patient's disease");
                 return;
             }
-            p.addMedicalHistory(disease);
+
             if (p.getAssignedDepartment() != null && !p.getAssignedDepartment().equalsIgnoreCase(de.getDepartmentName())) {
                 result.setText("Patient belongs to another department");
                 return;
@@ -122,12 +123,18 @@ public class AppointmentPanel extends JPanel {
 
             boolean booked = hospital.createAppointment(p, selectedDoctor, de, ap);
             if (!booked) {
-                result.setText(" Cannot book appointment");
+                if (isEmergency && hospital.isHospitalFull()) {
+
+                    result.setText("Hospital is full,Emergency patient Cannot be admitted");
+                } else {
+                    result.setText("Cannot book appointment");
+                }
                 return;
             }
-
-            JOptionPane.showMessageDialog(this, "Appointment Registered"+"AppointmentNumber:"+appointmentNumber+"Visit cost: " + visitCost + "\nService cost: " + serviceCost + "\nTotal: " + totalCost);
-            result.setText(" TotalCost: " +totalCost);
+            p.addMedicalHistory(disease);
+            new PatientDA().updatePatient(p);
+            JOptionPane.showMessageDialog(this, "Appointment Registered \n"+"\nAppointmentNumber:"+appointmentNumber+"\nVisit cost:" + visitCost + "\nService cost: " + serviceCost + "\nTotal: " + totalCost);
+            result.setText(" Total Cost: " +totalCost);
         });
     }
 

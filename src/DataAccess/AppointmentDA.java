@@ -122,5 +122,18 @@ public class AppointmentDA {
             e.printStackTrace();
         }
     }
+    public void deleteAppointment(int appointmentNumber) {
+
+        String sql = "DELETE FROM appointments WHERE appointmentNum = ?";
+
+        try (Connection connection = DatabaseManager.connect();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, appointmentNumber);
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
 

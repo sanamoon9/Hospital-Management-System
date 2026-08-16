@@ -87,14 +87,18 @@ public class AddPatientPanel extends JPanel {
 
             boolean added ;
              if (isEmergency){
-                 added=department.addEmergencyPatient(p);
+                 added=hospital.addEmergencyPatient(p,department);
              }
              else {
                  added = department.addPatient(p);
              }
-                if (!added){
-                    result.setText("Department is Full");
-                    return;
+                if (!added) {
+                    if (isEmergency && hospital.isCriticalCondition()) {
+                        result.setText("Hospital is Full ,Emergency patient cannot admitted");
+                    } else {
+                        result.setText("Department is full");
+                    }
+                   return;
                 }
                 boolean saved = patientDA.insert(p);
                 if (saved) {

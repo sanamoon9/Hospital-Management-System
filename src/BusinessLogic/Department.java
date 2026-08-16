@@ -1,118 +1,117 @@
+
+
 package BusinessLogic;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Department {
-    private String departmentName;
-    private List<Doctor> doctors;
-    private List<Patient> patients;
-    private int capacity;
-    private CostDeManager costDeManager;
-    private double totalIncome;
+ public class Department {
+   private String departmentName;
+   private List<Doctor> doctors;
+   private List<Patient> patients;
+   private int capacity;
+   private CostDeManager costDeManager;
+   private double totalIncome;
 
-    public Department(String departmentName, int capacity, CostDeManager costDeManager, double totalIncome) {
-        this.departmentName = departmentName;
-        this.capacity = capacity;
-        this.doctors = new ArrayList<>();
-        this.patients = new ArrayList<>();
-        this.costDeManager = costDeManager;
-        this.totalIncome = totalIncome;
+     public Department(String departmentName, int capacity, CostDeManager costDeManager, double totalIncome) {
+         this.departmentName = departmentName;
+         this.capacity = capacity;
+         this.doctors = new ArrayList<>();
+         this.patients = new ArrayList<>();
+         this.costDeManager = costDeManager;
+         this.totalIncome = totalIncome;
 
-    }
+     }
 
-    public int getCapacity() {
-        return capacity;
-    }
+     public int getCapacity() {
+         return capacity;
+     }
 
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
+     public void setCapacity(int capacity) {
+         this.capacity = capacity;
+     }
 
-    public String getDepartmentName() {
-        return departmentName;
-    }
+     public String getDepartmentName() {
+         return departmentName;
+     }
 
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
-    }
+     public void setDepartmentName(String departmentName) {
+         this.departmentName = departmentName;
+     }
 
-    public List<Doctor> getDoctors() {
-        return doctors;
-    }
+     public List<Doctor> getDoctors() {
+         return doctors;
+     }
 
-    public List<Patient> getPatients() {
-        return patients;
-    }
+     public List<Patient> getPatients() {
+         return patients;
+     }
 
 
-    public double getTotalIncome() {
-        return totalIncome;
-    }
+     public double getTotalIncome() {
+         return totalIncome;
+     }
 
-    public void setTotalIncome(double totalIncome) {
-        this.totalIncome = totalIncome;
-    }
+     public void setTotalIncome(double totalIncome) {
+         this.totalIncome = totalIncome;
+     }
 
-    public CostDeManager getCostDeManager() {
-        return costDeManager;
-    }
+     public CostDeManager getCostDeManager() {
+         return costDeManager;
+     }
 
-    public void setCostDeManager(CostDeManager costDeManager) {
-        this.costDeManager = costDeManager;
-    }
+     public void setCostDeManager(CostDeManager costDeManager) {
+         this.costDeManager = costDeManager;
+     }
 
-    public void addDoctor(Doctor doctor) {
-        if (!doctors.contains(doctor) && doctor != null) {
-            doctors.add(doctor);
-            doctor.setDepartment(this);
-        }
+     public void addDoctor(Doctor doctor) {
+         if (!doctors.contains(doctor) && doctor != null) {
+             doctors.add(doctor);
+             doctor.setDepartment(this);
+         }
 
-    }
+     }
 
-    public void removeDoctor(Doctor doctor) {
-        doctors.remove(doctor);
-    }
+     public void removeDoctor(Doctor doctor) {
+         doctors.remove(doctor);
+     }
 
-    public boolean isFull() {
-        if (patients.size() >= capacity) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean addPatient(Patient patient) {
+     public boolean isFull() {
+         if (patients.size() >= capacity) {
+             return true;
+         }
+         return false;
+     }
+      public boolean addPatient(Patient patient) {
         if (patient == null) {
-            return false;
+         return false;
         }
-        if (patients.contains(patient)) {
-            return true;
-        }
-        if (isFull()) {
-            return false;
-        }
-        patients.add(patient);
-        patient.setAssignedDepartment(departmentName);
-        return true;
-    }
+         if (patients.contains(patient)) {
+         return true;
+         }
 
-    public boolean addEmergencyPatient(Patient patient) {
-
+         if (isFull()) {
+          return false;
+         }
+          patients.add(patient);
+          patient.setAssignedDepartment(departmentName);
+          return true;
+      }
+     public boolean addEmergencyPatient(Patient patient) {
         if (patient == null || !patient.isEmergency()) {
-            return false;
+        return false;
         }
-
         if (patients.contains(patient)) {
             return true;
         }
-
+        if (isFull()){
+            return false;
+        }
         patients.add(patient);
-
         patient.setAssignedDepartment(departmentName);
-
         return true;
     }
 
-    public boolean removePatient(Patient patient) {
+      public boolean removePatient(Patient patient) {
         if (patient == null) {
             return false;
         }

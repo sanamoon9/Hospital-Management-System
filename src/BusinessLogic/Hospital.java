@@ -18,6 +18,8 @@ public class Hospital {
     private PatientDA patientDA=new PatientDA();
     private AppointmentDA appointmentDA=new AppointmentDA();
     private FinanceDA financeDA=new FinanceDA();
+    private boolean isCriticalCondition;
+    private boolean isSuccessCondition;
 
     public Hospital(String hospitalName, FinanceManager financeManager, int capacity){
        this.hospitalName=hospitalName;
@@ -25,7 +27,7 @@ public class Hospital {
         this.departments=new ArrayList<>();
         this.appointments=new ArrayList<>();
         this.capacity=capacity;
-        conditionService=new ConditionService(this);
+        conditionService=new ConditionService(this);;
 
     }
     public String getHospitalName() {
@@ -66,6 +68,21 @@ public class Hospital {
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
+
+    public boolean isCriticalCondition() {
+        return isCriticalCondition;
+    }
+
+    public void setCriticalCondition(boolean criticalCondition) {
+        isCriticalCondition = criticalCondition;
+    }
+    public boolean isSuccessCondition() {
+        return isSuccessCondition;
+    }
+
+    public void setSuccessCondition(boolean successCondition) {
+        isSuccessCondition = successCondition;
+    }
     public List<Patient> getAllPatient(Department department){
         return new ArrayList<>(department.getPatients());
     }
@@ -91,17 +108,25 @@ public class Hospital {
         if (patient==null || department==null){
             return false;
         }
-        if (!patient.isEmergency()){
+        if (!patient.isEmergency() ){
             return false;
         }
-        department.addEmergencyPatient(patient);
-            return true;
+        if (isHospitalFull() && !department.getPatients().contains(patient)){
+            isCriticalCondition=true;
+            return false;
+        }
+        if (department.isFull() && !department.getPatients().contains(patient)){
+            return false;
+        }
+        return department.addEmergencyPatient(patient);
+
    }
 
     public boolean dischargePatient(Patient patient, Department department){
         if (patient==null || department==null){
             return false;
         }
+
         if (!department.getPatients().contains(patient)) {
             return false;
         }
@@ -114,9 +139,17 @@ public class Hospital {
             a.setAppointmentNum(number);
             number++;
         }
+        boolean busy=!department.getPatients().isEmpty();
         boolean removed = department.removePatient(patient);
         if (!removed) {
             return false;
+        }
+
+        if (busy && department.getPatients().isEmpty()){
+            isSuccessCondition=true;
+        }
+        if (!isHospitalFull()){
+            isCriticalCondition=false;
         }
         patient.setAssignedDepartment(null);
         patientDA.updatePatient(patient);
@@ -165,8 +198,11 @@ public class Hospital {
            return false;
         }
 
-        if (isHospitalFull()&& !patientInDepartment) {
-            return false;
+        if (isHospitalFull() && !patientInDepartment) {
+           if (patient.isEmergency()){
+               isCriticalCondition=true;
+               return false;
+           }
         }
 
         double visitCost = appointment.getCost();
@@ -214,7 +250,22 @@ public class Hospital {
         financeDA.addDailyIncome(LocalDate.now().toString(), totalCost);
         return true;
     }
+    public boolean completeAppointment(Appointment appointment) {
 
+        if (appointment == null) {
+            return false;
+        }
+
+        if (!appointments.contains(appointment)) {
+            return false;
+        }
+
+        appointment.complete();
+        appointments.remove(appointment);
+        appointmentDA.deleteAppointment(appointment.getAppointmentNum());
+
+        return true;
+    }
     public Department findDepartmentByName(String name){
         if (name==null){
             return null;

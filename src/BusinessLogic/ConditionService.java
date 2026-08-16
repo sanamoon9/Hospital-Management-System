@@ -5,8 +5,11 @@ public class ConditionService {
     public ConditionService(Hospital hospital){
         this.hospital=hospital;
     }
-    public boolean isCriticalCondition(){
-      return hospital.isHospitalFull();
+    public boolean isCriticalCondition(Patient patient,Department department){
+        if (patient==null || department==null){
+            return false;
+        }
+      return hospital.isHospitalFull() && patient.isEmergency();
 
     }
     public boolean isSuccessCondition(){

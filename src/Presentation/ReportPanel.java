@@ -1,8 +1,6 @@
 package Presentation;
-import BusinessLogic.ConditionService;
-import BusinessLogic.Department;
-import BusinessLogic.FinanceManager;
-import BusinessLogic.Hospital;
+import BusinessLogic.*;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -31,11 +29,11 @@ public class ReportPanel extends JPanel {
             sb.append("\n");
         }
         sb.append(" Budget: ").append(financeManager.getHospitalBudget()).append("\n");
-        if (hospital.isHospitalFull()) {
+        if (hospital.isCriticalCondition()) {
             sb.append("The situation is critical, and the hospital is full.\n");
         }
-        else if (conditionService.isSuccessCondition()) {
-            sb.append("The situation is successful, and all sections are free of patients.\n");
+        else if (hospital.isSuccessCondition()) {
+            sb.append("The situation is successful, a department has been completely cleared.\n");
         }
         else {
             sb.append(" Hospital Status: NORMAL\n");
